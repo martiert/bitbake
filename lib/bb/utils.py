@@ -561,7 +561,10 @@ def remove(path, recurse=False):
     import os, errno, shutil, glob
     for name in glob.glob(path):
         try:
-            os.unlink(name)
+            if os.path.isdir(name):
+                shutil.rmtree(name)
+            else:
+                os.unlink(name)
         except OSError as exc:
             if recurse and exc.errno == errno.EISDIR:
                 shutil.rmtree(name)
